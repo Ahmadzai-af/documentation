@@ -11,13 +11,19 @@ Replenish on order (MTO)
 .. |BOM| replace:: :abbr:`BOM (bill of materials)`
 
 *Replenish on order*, also known as *MTO* (make to order), is a replenishment strategy that creates
-a draft order for a product every time it is required to fulfill a sales order (SO), or when it is
-needed as a component in a manufacturing order (MO).
+a draft order every time a product is needed to fulfill a sales order (SO) or as a component in a
+manufacturing order (MO).
 
-For products that are purchased from a vendor, a request for quotation (RFQ) is created to replenish
-the product, while an |MO| is created for products that are manufactured. The creation of an |RFQ|
-or |MO| occurs every time an |SO| or |MO| that requires the product is confirmed, regardless of the
-current stock level of the product being ordered.
+- For :doc:`purchased products <../../../purchase/manage_deals/rfq>`, Odoo creates a |RFQ|
+- For :doc:`manufactured products
+  <../../../manufacturing/basic_setup/configure_manufacturing_product>`, it creates a |MO|
+
+If stock is available, no |RFQ| or |MO| is generated and the sale proceeds normally. Otherwise, the
+|RFQ| or |MO| is generated and directly linked to the originating |SO| through a smart button.
+
+This approach offers clear traceability, since each |RFQ| or |MO| is tied back to its demand.
+However, it is also rigid. If the linked |RFQ| or |MO| is canceled, the |SO| cannot be fulfilled by
+another replenishment document.
 
 .. important::
    In order to use the |MTO| route, the :guilabel:`Multi-Step Routes` feature must be enabled. To do
@@ -132,6 +138,14 @@ Return to the |SO| by clicking the :guilabel:`SO` breadcrumb, or by navigating t
 Finally, click the :guilabel:`Delivery` smart button at the top of the order to open the delivery
 order. Once the products have been shipped to the customer, click :guilabel:`Validate` to confirm
 the delivery.
+
+Cancelling an SO with an MTO product
+------------------------------------
+
+When a |SO| is cancelled, and it had created an |RFQ| or |MO|, only the related delivery order is
+cancelled automatically. A warning appears in the |RFQ| or |MO| chatter noting the cancellation, but
+these documents remain active. This allows the user to either cancel them manually or repurpose the
+replenishment for another order.
 
 .. seealso::
    For information on workflows that include the |MTO| route, see the following documentation:
